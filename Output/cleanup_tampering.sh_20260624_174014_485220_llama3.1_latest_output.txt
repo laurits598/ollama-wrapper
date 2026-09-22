@@ -1,0 +1,9 @@
+{
+  "classification": "Trojan / privilege escalation",
+  "severity": "High",
+  "risk_score": 80,
+  "evidence": [
+    "Modified system configuration file (/etc)",
+    "Created suspicious new file (/etc/hosts.deny)"
+  ]
+}

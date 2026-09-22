@@ -1,0 +1,10 @@
+{
+  "classification": "Trojan / credential stealer",
+  "severity": "High",
+  "risk_score": 80,
+  "evidence": [
+    "Established a network connection to 192.168.65.7:53 with 4 hits",
+    "Connected to example.com (172.66.147.243) on port 80 and attempted to download payload.sh, but received a 404 error",
+    "Modified the /root directory and created new files in /.ssh"
+  ]
+}

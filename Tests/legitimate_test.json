@@ -1,0 +1,79 @@
+{
+  "msg": "File Sandbox Environment - Is this file safe to use or suspicious?",
+  "target_file": "/usr/local/bin/system_update.sh",
+  "execution_time_seconds": 84,
+  "exit_code": 0,
+  "network_connections": [
+    {
+      "type": "tcp",
+      "destination_ip": "91.189.91.157",
+      "port": 80,
+      "protocol": "tcp",
+      "hits": 345,
+      "out": 182,
+      "in": 163,
+      "out_payload": "23 pkts/4521B",
+      "in_payload": "156 pkts/34567890B"
+    },
+    {
+      "type": "tcp",
+      "destination_ip": "91.189.91.158",
+      "port": 443,
+      "protocol": "tcp",
+      "hits": 28,
+      "out": 14,
+      "in": 14,
+      "out_payload": "8 pkts/2048B",
+      "in_payload": "12 pkts/1024567B"
+    },
+    {
+      "type": "tcp",
+      "destination_ip": "8.8.8.8",
+      "port": 53,
+      "protocol": "udp",
+      "hits": 12,
+      "out": 6,
+      "in": 6,
+      "out_payload": "0 pkts/0B",
+      "in_payload": "0 pkts/0B"
+    }
+  ],
+  "traffic_verdict": [
+    {
+      "ip": "91.189.91.157",
+      "score": 0,
+      "reports": 0,
+      "country": "United Kingdom",
+      "isTor": false
+    },
+    {
+      "ip": "91.189.91.158",
+      "score": 0,
+      "reports": 0,
+      "country": "United Kingdom",
+      "isTor": false
+    },
+    {
+      "ip": "8.8.8.8",
+      "score": 0,
+      "reports": 0,
+      "country": "United States",
+      "isTor": false
+    }
+  ],
+
+  "filesystem_changes": {
+    "modified": [
+      "/var/lib/apt/extended_states",
+      "/var/cache/apt/pkgcache.bin",
+      "/var/log/apt/history.log"
+    ],
+    "new_files": [
+      "/var/cache/apt/archives/libc6_2.31-13ubuntu9.12_amd64.deb",
+      "/var/lib/dpkg/status-old",
+      "/var/lib/apt/lists/security.ubuntu.com_ubuntu_dists_focal-security_InRelease",
+      "/var/lib/apt/lists/archive.ubuntu.com_ubuntu_dists_focal-updates_Packages.gz"
+    ],
+    "deleted": "None"
+  }
+}

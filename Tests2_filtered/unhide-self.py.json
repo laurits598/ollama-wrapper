@@ -1,0 +1,17 @@
+{
+  "target_file": "/tmp/tmpnniv3z9e/home/user/Downloads/Umbreon-Rootkit-f3fbc358daba6629aa1abd53e77ee55e68191ec1/Umbreon-Rootkit-f3fbc358daba6629aa1abd53e77ee55e68191ec1/utils/unhide-self.py",
+  "execution_time": 2,
+  "exit_code": 2,
+  "network_connections": [],
+  "traffic_verdict": [],
+  "filesystem_changes": {
+    "modified": [],
+    "new": [],
+    "deleted": []
+  },
+  "malware_output": {
+    "content": "./unhide-self.py: line 2: from: command not found\n./unhide-self.py: line 3: from: command not found\n./unhide-self.py: line 4: syntax error near unexpected token `('\n./unhide-self.py: line 4: `libc = cdll.LoadLibrary(\"libc.so.6\") '",
+    "lines": 4,
+    "truncated": false
+  }
+}

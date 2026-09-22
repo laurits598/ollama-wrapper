@@ -1,0 +1,149 @@
+\section{Implementation}
+\noindent
+This section describes the implementation of the project prototype as it exists in its current stage. The final solution focuses on Docker-based isolation and behavior-based malware detection. Earlier design ideas focused on the infrastructure, where Kubernetes was a key component, and used for orchestration. However, this was not pursued further, as it introduced unnecessary complexity for the current project scope. The implemented system instead emphasizes controlled execution, observation of malicious behavior inside containers, and decision-making based on behavior analysis. The purpose of this section is to explain the architecture and internal logic of the system; concrete evaluation scenarios and test-specific setup are described separately in the testing part of the report.
+ 
+\subsection{Implementation Strategy}
+\noindent
+The implementation is divided into two main parts: a Python control layer and a Docker-based execution environment. Python is used to coordinate the workflow, while Docker provides the isolation required to execute suspicious files without running them directly on the host system.
+ 
+\vspace{1em}
+ 
+This design supports two practical goals. First, it allows suspicious files to be executed in a realistic Linux environment rather than directly on the host system. Second, it enables the system to measure behavioral effects, such as file creation, deletion, modification, and changes to sensitive system paths.
+ 
+\subsection{Docker-Based Environment}
+\noindent
+The project uses four separate Docker images, each responsible for a specific part of the analysis workflow:
+
+\begin{itemize}
+\item A \textbf{host image}, which represents the machine being analyzed
+\item A \textbf{scanner image}, which contains the Python scanning logic and communicates with Docker through the mounted Docker socket
+\item A \textbf{sandbox image}, which is the sandbox in which the files are executed
+\item An \textbf{ollama image}, which provides the large language model inference capability used by the AI agent for verdict generation
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\linewidth]{images/image_overview.png}
+\caption{Overview of the Docker-based environment and the interaction between the host, scanner, sandbox, and Ollama containers.}
+\label{fig:docker_environment}
+\end{figure}
+
+\noindent
+As illustrated in Figure~\ref{fig:docker_environment}, the scanner container acts as the central orchestration component. It interacts with the host container to discover candidate files, generates sandbox environments for isolated execution, and collects the resulting execution artifacts. Once execution has completed, these artifacts are organized into a structured JSON execution report and passed to the Ollama container, where large language model inference is used to generate the final assessment.
+
+\vspace{1em}
+
+\noindent
+\textbf{The host image} is defined in the project under \texttt{ContainerImages/Host/Dockerfile}. It creates a lightweight Alpine-based environment with a simulated user filesystem and predefined directory structure. This image acts as the target system that the scanner interacts with during analysis.
+
+\vspace{1em}
+
+\noindent
+\textbf{The scanner image} is defined in \texttt{ContainerImages/Scanner/Dockerfile}. It contains the Python scripts responsible for locating executable files, launching isolated analysis containers, collecting runtime artifacts, and coordinating the subsequent AI-based analysis process.
+
+\vspace{1em}
+
+\noindent
+\textbf{The sandbox image} is not defined through a static Dockerfile. Instead, it is generated dynamically by \texttt{linux\_container.py}. In contrast to the host and scanner containers, which remain relatively static throughout execution, the sandbox image is rebuilt for each analysis iteration. This allows the sandbox environment to mirror the selected target path and include only the files required for the current execution scenario.
+
+\vspace{1em}
+
+\noindent
+\textbf{The Ollama image} provides the large language model inference backend used by the AI agent. After the scanner has completed execution and generated the structured JSON execution report, the AI agent invokes the Ollama container to analyze the collected behavioral artifacts and produce the final assessment.
+
+
+ 
+\subsection{Python Control Layer}
+\noindent
+The implementation is orchestrated through a set of Python scripts in the project root. The file \texttt{main.py} provides a command-line interface for the overall workflow. From this interface, the user can create analysis hosts, list running hosts, run the scanner against a local path, run the scanner against a container path, distribute scans across directories, and copy selected malware samples into a target host.
+ 
+\subsubsection{Execution Pipeline}
+\noindent
+The supporting logic is implemented in \texttt{helpers.py}. This module handles container discovery, host creation, malware sample listing, file copying into containers, and construction of the Docker commands used to run the scanner image. In practice, this module acts as the integration layer between Python and the Docker runtime, forming an efficient pipeline, making it easy to use and allows for rapid-testing.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1\linewidth]{images/pipeline-src-code.jpg}
+    \caption{Simplified workflow showing module interaction and data flow through the execution pipeline. \texttt{helpers.py} acts as the central integration point between Python application logic and the Docker runtime.}
+    \label{fig:execution-pipeline}
+\end{figure}
+
+The execution flow begins when \texttt{main.py} initializes the system and passes control to \texttt{cli.py}, which presents a menu of operations to the user (as shown in Figure~\ref{fig:execution-pipeline}). Based on the selected option and provided parameters, \texttt{helpers.py} orchestrates the workflow: discovering available containers and files, optionally staging malware samples into the target environment, constructing the appropriate Docker command, and executing the scanner via the Docker runtime. The Docker containers---both the scanner image and the sandbox container---produce the execution artifacts that are consolidated into a structured JSON execution report. This report is then forwarded through the Ollama wrapper to the AI agent, after which the resulting analysis is presented to the user, completing the cycle.
+
+ 
+ 
+ 
+\subsubsection{Kubernetes Substitute}
+\noindent
+The file \texttt{distributed\_scan.py} adds a simple parallel scanning mechanism. Instead of relying on Kubernetes, the project distributes work by enumerating directories inside a selected container and launching multiple scanner jobs from Python using a thread pool. This provides a lightweight form of workload distribution within the scope of the prototype without introducing a full orchestration platform.
+ 
+\subsection{Scanning and Execution Workflow}
+\noindent
+The dynamic analysis logic is implemented in \texttt{linux\_sandbox.py} and \texttt{linux\_container.py}. The first script is responsible for scanning a target path and identifying executable files based on a set of relevant extensions such as \texttt{.sh}, \texttt{.py}, \texttt{.bin}, and \texttt{.run}. When such a file is found, it is passed to the container execution stage.
+ 
+\vspace{1em}
+ 
+The execution stage creates a temporary sandbox based on Ubuntu. The relevant files are copied into the sandbox, the selected sample is made executable, and the file is run inside an isolated Docker container. Before execution, the system creates a manifest of the files under \texttt{/home} using SHA-256 hashes. After execution, the same manifest is collected again. By comparing the two manifests, the system can detect modified, newly created, and deleted files.
+ 
+\vspace{1em}
+ 
+In addition to the manifest comparison, the implementation also uses \texttt{docker diff} to inspect filesystem changes at the container level. This is important because some malicious actions may target locations outside the monitored user directory, for example by creating files in \texttt{/opt} or altering service-related files under \texttt{/etc}. Combining the two methods improves visibility into both user-space and system-level effects.
+ 
+\subsection{Verdict Logic}
+\noindent
+The verdict logic evolved through two implementation stages. The original prototype relied on a rule-based behavioral classifier, while the current architecture uses an AI agent-based verdict as the primary mechanism for final assessment. Both approaches remain documented in the implementation chapter because the earlier rule-based system was implemented, tested, and used as the baseline from which the final AI-agent solution developed.
+ 
+\subsubsection{Rule-Based Verdict (Legacy Approach)}
+\noindent
+The original decision logic is implemented in \texttt{verdict.py}. Rather than classifying a sample from a static signature, this baseline approach assigns a verdict based on the behavior observed during execution. The scoring logic considers several indicators:
+\begin{itemize}
+    \item File deletions, especially when multiple files are removed
+    \item Modifications to document-oriented user files
+    \item Creation or modification of executable content
+    \item Access to sensitive system paths such as \texttt{/etc}, \texttt{/bin}, or \texttt{/usr}
+    \item Suspicious network-related activity detected through \texttt{tcpdump\_mon.py} and analyzed by \texttt{traffic\_verdict.py} using AbuseIPDB reputation scoring
+    \item Indicators of encryption-like behavior
+\end{itemize}
+ 
+\noindent
+The network monitoring component allows the system to observe outbound and inbound connections made during execution. Observed IP addresses are analyzed using the AbuseIPDB API in order to identify potentially malicious or highly reported hosts. This extended the original rule-based prototype beyond filesystem-based behavior and added an additional layer of behavioral analysis.
+ 
+\vspace{1em}
+ 
+Based on the accumulated score, a sample is classified as \textit{benign}, \textit{low-confidence suspicious}, \textit{suspicious}, or \textit{likely malicious}. This deterministic approach explicitly operationalizes behavioral indicators and provides transparency in the decision-making process. In the final project architecture, however, it serves as a documented legacy baseline rather than the primary decision mechanism.
+ 
+\subsubsection{AI Agent-Based Verdict (Current Approach)}
+\noindent
+The current implementation uses an AI agent-based verdict mechanism as the preferred and final assessment stage. After sandbox execution has completed, the collected artifacts are stored in a structured JSON execution report. This report contains the behavioral evidence produced during execution, including filesystem changes, network observations, execution metadata, and captured output. The AI agent consumes this JSON execution report through the Ollama wrapper and generates the final analysis report based on the collected behavioral artifacts rather than on fixed thresholds alone.
+ 
+\vspace{1em}
+ 
+The AI agent approach provides several advantages over the legacy rule-based method:
+\begin{itemize}
+    \item \textbf{Contextual reasoning}: The agent can identify complex behavioral signatures that emerge from combinations of simpler indicators, capturing attack patterns that explicit rules might miss.
+    \item \textbf{Adaptability}: The agent can generalize to novel malware variants without requiring manual rule updates.
+    \item \textbf{Reduced false positives}: By considering the broader context of observed behavior, the agent can distinguish between benign programs with unusual behavior and actual malicious activity.
+    \item \textbf{Explainability}: The agent can provide rationale for its classification decisions, enhancing interpretability compared to rigid rule combinations.
+\end{itemize}
+ 
+\noindent
+The testing chapter evaluates both approaches in order to document the transition from the earlier rule-based prototype to the final AI-agent-based assessment. In the implemented architecture, however, the AI agent is the component that produces the final verdict used by the system.
+ 
+\subsection{Malware Behavior Focus}
+\noindent
+The implemented prototype is centered around representative malware behaviors rather than complex deployment infrastructure. The main emphasis is on detecting practical indicators of compromise through runtime observation, not on building a large orchestration layer.
+ 
+\vspace{1em}
+ 
+Examples of these behaviors include destructive actions, document modification, creation of executable payloads, and persistence-related changes in system directories. This focus on observable behavior makes the prototype more relevant to malware analysis than a broader but less developed orchestration setup would have been.
+
+\subsection{Ollama Wrapper Integration}
+
+To support AI-assisted behavioral assessment, the implementation includes a lightweight Python-based Ollama wrapper that acts as the interface between the malware-analysis pipeline and the local language model runtime. Its purpose is to transform the structured JSON execution report into a prompt, submit this material to the selected local model through Ollama, and return the generated assessment in a predictable format for further processing. This wrapper separates model interaction from the rest of the control logic, making it easier to test different prompts, models, and output formats without changing the surrounding sandbox and monitoring components. By keeping inference local, the design also preserves confidentiality, since execution logs and behavioral data remain inside the analysis environment rather than being transmitted to external services.
+
+
+
+
+\subsection{Summary}
+\noindent
+The current implementation reflects a deliberate shift from orchestration-oriented design toward a smaller and more focused malware-analysis prototype. Docker is used as the primary isolation mechanism, Python provides coordination and automation, and the detection logic is based on behavioral evidence collected during runtime. The resulting architecture follows a clear flow from execution, to artifact collection, to structured JSON reporting, to AI-agent assessment through Ollama, and finally to a generated analysis report. The rule-based verdict remains documented as the original prototype approach, but the project now aligns with its final objective by using AI-agent-based assessment as the primary mechanism for analyzing suspicious files through their observed behavior.

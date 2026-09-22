@@ -1,0 +1,10 @@
+{
+  "classification": "Benign installer",
+  "severity": "Low",
+  "risk_score": 10,
+  "evidence": [
+    "The sample executed a Linux reconnaissance script (reconnaissance.sh) in /tmp.",
+    "The script output indicates the system is running Linux 6.6.87.2-microsoft-standard-WSL2 with an Intel Core i9 processor.",
+    "No network connections or traffic were observed during execution."
+  ]
+}

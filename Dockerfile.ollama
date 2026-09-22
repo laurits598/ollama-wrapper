@@ -1,0 +1,7 @@
+FROM ollama/ollama:latest
+
+# Expose the port that ollama runs on
+EXPOSE 11434
+
+# Run ollama (default command)
+CMD ["serve"]

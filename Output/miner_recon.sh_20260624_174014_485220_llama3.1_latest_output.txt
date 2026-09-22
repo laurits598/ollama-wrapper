@@ -1,0 +1,10 @@
+{
+  "classification": "Benign installer",
+  "severity": "Low",
+  "risk_score": 10,
+  "evidence": [
+    "The script was executed in /tmp/tmpaat4vl79/home/user/Documents/miner_recon.sh",
+    "No network connections were made during execution",
+    "Filesystem changes indicate the installation of a system monitoring tool (top)"
+  ]
+}

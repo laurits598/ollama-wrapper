@@ -1,0 +1,34 @@
+{
+  "target_file": "/tmp/tmpl2ezncni/home/user/Documents/setup.sh",
+  "execution_time": 3,
+  "exit_code": null,
+  "network_connections": [],
+  "traffic_verdict": [],
+  "filesystem_changes": {
+    "modified": [
+      "/etc",
+      "/etc/systemd",
+      "/etc/systemd/system",
+      "/home",
+      "/home/user",
+      "/home/user/Documents"
+    ],
+    "new": [
+      "/etc/hosts.allow",
+      "/etc/systemd/system/your-redtail.service",
+      "/etc/hosts.deny",
+      "/.vWbJABr"
+    ],
+    "deleted": [
+      "/home/user/Documents/redtail.arm7",
+      "/home/user/Documents/redtail.arm8",
+      "/home/user/Documents/redtail.i686",
+      "/home/user/Documents/redtail.x86_64"
+    ]
+  },
+  "malware_output": {
+    "content": "",
+    "lines": 0,
+    "truncated": false
+  }
+}

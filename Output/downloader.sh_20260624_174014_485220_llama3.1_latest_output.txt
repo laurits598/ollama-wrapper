@@ -1,0 +1,10 @@
+{
+  "classification": "Downloader / failed to download payload",
+  "severity": "Medium",
+  "risk_score": 50,
+  "evidence": [
+    "attempted to download a file from http://example.com/payload.sh",
+    "received HTTP error 404: Not Found",
+    "failed to access or open the downloaded file"
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "target_file": "/tmp/tmpcljm8hdm/home/user/Pictures/crypto.sh",
+  "execution_time": 63,
+  "exit_code": 124,
+  "network_connections": [
+    {
+      "protocol": "tcp",
+      "destination_ip": "192.168.1.132",
+      "port": 443,
+      "hits": 20
+    }
+  ],
+  "traffic_verdict": [
+    {
+      "abuseConfidenceScore": 0,
+      "countryName": null,
+      "ip": "192.168.1.132",
+      "isTor": false,
+      "totalReports": 0
+    }
+  ],
+  "filesystem_changes": {
+    "modified": [
+      "/etc",
+      "/etc/profile.d",
+      "/etc/init.d",
+      "/etc/apt",
+      "/etc/apt/trusted.gpg.d",
+      "/home",
+      "/home/user",
+      "/home/user/Pictures",
+      "/root"
+    ],
+    "new": [
+      "/etc/profile.d/dvcvpi.vhyk",
+      "/etc/init.d/odavuxgu.smb",
+      "/etc/apt/trusted.gpg.d/nfijca.slwfv",
+      "/etc/apt/trusted.gpg.d/uwgojdvzz.ls",
+      "/home/user/Pictures/nretgttwi.vubd",
+      "/home/user/Pictures/jnepos.pu",
+      "/tfumk.yal",
+      "/root/..file_mapping.db",
+      "/root/key.bin",
+      "/root/pub.pem"
+    ],
+    "deleted": [
+      "/etc/profile.d/01-locale-fix.sh",
+      "/etc/init.d/hwclock.sh",
+      "/etc/apt/trusted.gpg.d/ubuntu-keyring-2012-cdimage.gpg",
+      "/etc/apt/trusted.gpg.d/ubuntu-keyring-2018-archive.gpg",
+      "/home/user/Pictures/crypto.sh",
+      "/home/user/Pictures/mcenter.txt",
+      "/.dockerenv"
+    ],
+    "filtered": {
+      "modified": 382,
+      "new": 1413,
+      "deleted": 1448,
+      "total": 3243,
+      "top_locations": [
+        {
+          "path": "/usr/share/perl",
+          "count": 1352
+        },
+        {
+          "path": "/usr/lib/x86_64-linux-gnu",
+          "count": 1170
+        },
+        {
+          "path": "/usr/share/doc",
+          "count": 530
+        },
+        {
+          "path": "/usr/share/perl5",
+          "count": 84
+        },
+        {
+          "path": "/usr/share/info",
+          "count": 21
+        },
+        {
+          "path": "/usr/share/gcc",
+          "count": 12
+        },
+        {
+          "path": "/usr/share/keyrings",
+          "count": 11
+        },
+        {
+          "path": "/usr/share/gitweb",
+          "count": 10
+        },
+        {
+          "path": "/usr/share/apport",
+          "count": 8
+        },
+        {
+          "path": "/usr/share/gdb",
+          "count": 7
+        },
+        {
+          "path": "/usr/share/docker.io",
+          "count": 6
+        },
+        {
+          "path": "/usr/lib/ssl",
+          "count": 6
+        }
+      ],
+      "note": "collapsed"
+    }
+  },
+  "malware_output": {
+    "content": "Sample execution timed out after 60 seconds.",
+    "lines": 1,
+    "truncated": false
+  }
+}

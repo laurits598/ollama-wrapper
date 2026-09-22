@@ -1,0 +1,61 @@
+{
+  "target_file": "/tmp/tmpnniv3z9e/home/user/Downloads/Umbreon-Rootkit-f3fbc358daba6629aa1abd53e77ee55e68191ec1/Umbreon-Rootkit-f3fbc358daba6629aa1abd53e77ee55e68191ec1/utils/ex/listen.sh",
+  "execution_time": 3,
+  "exit_code": 0,
+  "network_connections": [
+    {
+      "protocol": "tcp",
+      "destination_ip": "192.168.65.7",
+      "port": 53,
+      "hits": 4
+    },
+    {
+      "protocol": "tcp",
+      "destination_ip": "3.72.226.172",
+      "port": 80,
+      "hits": 7
+    },
+    {
+      "protocol": "tcp",
+      "destination_ip": "3.72.226.172",
+      "port": 443,
+      "hits": 4
+    }
+  ],
+  "traffic_verdict": [
+    {
+      "abuseConfidenceScore": 0,
+      "countryName": null,
+      "ip": "192.168.65.7",
+      "isTor": false,
+      "totalReports": 0
+    },
+    {
+      "abuseConfidenceScore": 0,
+      "countryName": "Germany",
+      "ip": "3.72.226.172",
+      "isTor": false,
+      "totalReports": 0
+    }
+  ],
+  "filesystem_changes": {
+    "modified": [
+      "/etc",
+      "/etc/passwd",
+      "/etc/shadow",
+      "/etc/passwd-",
+      "/etc/subuid",
+      "/etc/subgid"
+    ],
+    "new": [
+      "/etc/subgid-",
+      "/etc/subuid-"
+    ],
+    "deleted": []
+  },
+  "malware_output": {
+    "content": "",
+    "lines": 0,
+    "truncated": false
+  }
+}

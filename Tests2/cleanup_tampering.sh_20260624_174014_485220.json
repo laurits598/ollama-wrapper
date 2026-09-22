@@ -1,0 +1,21 @@
+{
+  "target_file": "/tmp/tmpaat4vl79/home/user/Documents/cleanup_tampering.sh",
+  "execution_time": 2,
+  "exit_code": 1,
+  "network_connections": [],
+  "traffic_verdict": [],
+  "filesystem_changes": {
+    "modified": [
+      "/etc"
+    ],
+    "new": [
+      "/etc/hosts.deny"
+    ],
+    "deleted": []
+  },
+  "malware_output": {
+    "content": "",
+    "lines": 0,
+    "truncated": false
+  }
+}

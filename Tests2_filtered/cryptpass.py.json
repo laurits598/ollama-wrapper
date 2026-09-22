@@ -1,0 +1,17 @@
+{
+  "target_file": "/tmp/tmpnniv3z9e/home/user/Downloads/Umbreon-Rootkit-f3fbc358daba6629aa1abd53e77ee55e68191ec1/Umbreon-Rootkit-f3fbc358daba6629aa1abd53e77ee55e68191ec1/utils/cryptpass.py",
+  "execution_time": 2,
+  "exit_code": 2,
+  "network_connections": [],
+  "traffic_verdict": [],
+  "filesystem_changes": {
+    "modified": [],
+    "new": [],
+    "deleted": []
+  },
+  "malware_output": {
+    "content": "./cryptpass.py: line 1: import: command not found\n./cryptpass.py: line 2: syntax error near unexpected token `('\n./cryptpass.py: line 2: `salty = ''.join(random.choice(string.ascii_uppercase + string.digits + string.ascii_lowercase) for _ in range(8))'",
+    "lines": 3,
+    "truncated": false
+  }
+}

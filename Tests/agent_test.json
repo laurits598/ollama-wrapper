@@ -1,0 +1,79 @@
+{
+  "msg": "File Sandbox Environment - Is this file safe to use or suspicious?",
+  "target_file": "/home/user/Desktop/agent_installer.sh",
+  "execution_time_seconds": 62,
+  "exit_code": 0,
+  "network_connections": [
+    {
+      "type": "tcp",
+      "destination_ip": "192.168.65.7",
+      "port": 53,
+      "protocol": "udp",
+      "hits": 12,
+      "out": 6,
+      "in": 6,
+      "out_payload": "0 pkts/0B",
+      "in_payload": "0 pkts/0B"
+    },
+    {
+      "type": "tcp",
+      "destination_ip": "172.66.152.176",
+      "port": 80,
+      "protocol": "tcp",
+      "hits": 168713,
+      "out": 88475,
+      "in": 88452,
+      "out_payload": "19 pkts/7190B",
+      "in_payload": "88452 pkts/9921985B"
+    },
+    {
+      "type": "tcp",
+      "destination_ip": "138.68.95.15",
+      "port": 8000,
+      "protocol": "tcp",
+      "hits": 2,
+      "out": 1,
+      "in": 1,
+      "out_payload": "0 pkts/0B",
+      "in_payload": "0 pkts/0B"
+    }
+  ],
+  "traffic_verdict": [
+    {
+      "ip": "138.68.95.15",
+      "score": 0,
+      "reports": 0,
+      "country": "Germany",
+      "isTor": false
+    },
+    {
+      "ip": "172.66.152.176",
+      "score": 0,
+      "reports": 38,
+      "country": "United States of America",
+      "isTor": false
+    },
+    {
+      "ip": "192.168.65.7",
+      "score": 0,
+      "reports": 0,
+      "country": "None",
+      "isTor": false
+    }
+  ],
+  "filesystem_changes": {
+    "modified": "None",
+    "new_files": [
+      "/etc/python3/debian_config",
+      "/etc/systemd/system/agent.service",
+      "/etc/mime.types",
+      "/etc/python3.10/sitecustomize.py",
+      "/etc/ld.so.cache",
+      "/etc/inputrc",
+      "/opt/agent/agent.py",
+      "/var/lib/python/python3.10_installed",
+      "/var/cache/ldconfig/aux-cache"
+    ],
+    "deleted": "None"
+  }
+}

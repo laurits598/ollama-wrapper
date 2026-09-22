@@ -1,0 +1,422 @@
+[
+  {
+    "model": "llama3.1:latest",
+    "log_name": "account_takeover.sh",
+    "source_file": "account_takeover.sh_20260624_174014_485220.json",
+    "runs": [
+      {
+        "run": 1,
+        "severity": "Critical",
+        "risk_score": 95,
+        "source_file": "account_takeover.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 2,
+        "severity": "Critical",
+        "risk_score": 95,
+        "source_file": "account_takeover.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 3,
+        "severity": "Critical",
+        "risk_score": 95,
+        "source_file": "account_takeover.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 4,
+        "severity": "Critical",
+        "risk_score": 95,
+        "source_file": "account_takeover.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 5,
+        "severity": "Critical",
+        "risk_score": 95,
+        "source_file": "account_takeover.sh_20260624_174014_485220.json"
+      }
+    ],
+    "severity_mode": "Critical",
+    "severity_counts": {
+      "Critical": 5
+    },
+    "avg_risk_score": 95.0
+  },
+  {
+    "model": "llama3.1:latest",
+    "log_name": "cleanup_tampering.sh",
+    "source_file": "cleanup_tampering.sh_20260624_174014_485220.json",
+    "runs": [
+      {
+        "run": 1,
+        "severity": "High",
+        "risk_score": 80,
+        "source_file": "cleanup_tampering.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 2,
+        "severity": "High",
+        "risk_score": 80,
+        "source_file": "cleanup_tampering.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 3,
+        "severity": "High",
+        "risk_score": 80,
+        "source_file": "cleanup_tampering.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 4,
+        "severity": "High",
+        "risk_score": 80,
+        "source_file": "cleanup_tampering.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 5,
+        "severity": "High",
+        "risk_score": 80,
+        "source_file": "cleanup_tampering.sh_20260624_174014_485220.json"
+      }
+    ],
+    "severity_mode": "High",
+    "severity_counts": {
+      "High": 5
+    },
+    "avg_risk_score": 80.0
+  },
+  {
+    "model": "llama3.1:latest",
+    "log_name": "combined_attack.sh",
+    "source_file": "combined_attack.sh_20260624_174014_485220.json",
+    "runs": [
+      {
+        "run": 1,
+        "severity": "High",
+        "risk_score": 80,
+        "source_file": "combined_attack.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 2,
+        "severity": "High",
+        "risk_score": 80,
+        "source_file": "combined_attack.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 3,
+        "severity": "High",
+        "risk_score": 80,
+        "source_file": "combined_attack.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 4,
+        "severity": "High",
+        "risk_score": 80,
+        "source_file": "combined_attack.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 5,
+        "severity": "High",
+        "risk_score": 80,
+        "source_file": "combined_attack.sh_20260624_174014_485220.json"
+      }
+    ],
+    "severity_mode": "High",
+    "severity_counts": {
+      "High": 5
+    },
+    "avg_risk_score": 80.0
+  },
+  {
+    "model": "llama3.1:latest",
+    "log_name": "defense_evasion.sh",
+    "source_file": "defense_evasion.sh_20260624_174014_485220.json",
+    "runs": [
+      {
+        "run": 1,
+        "severity": "Low",
+        "risk_score": 10,
+        "source_file": "defense_evasion.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 2,
+        "severity": "Low",
+        "risk_score": 10,
+        "source_file": "defense_evasion.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 3,
+        "severity": "Low",
+        "risk_score": 10,
+        "source_file": "defense_evasion.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 4,
+        "severity": "Low",
+        "risk_score": 10,
+        "source_file": "defense_evasion.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 5,
+        "severity": "Low",
+        "risk_score": 10,
+        "source_file": "defense_evasion.sh_20260624_174014_485220.json"
+      }
+    ],
+    "severity_mode": "Low",
+    "severity_counts": {
+      "Low": 5
+    },
+    "avg_risk_score": 10.0
+  },
+  {
+    "model": "llama3.1:latest",
+    "log_name": "downloader.sh",
+    "source_file": "downloader.sh_20260624_174014_485220.json",
+    "runs": [
+      {
+        "run": 1,
+        "severity": "Medium",
+        "risk_score": 50,
+        "source_file": "downloader.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 2,
+        "severity": "Medium",
+        "risk_score": 50,
+        "source_file": "downloader.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 3,
+        "severity": "Medium",
+        "risk_score": 50,
+        "source_file": "downloader.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 4,
+        "severity": "Medium",
+        "risk_score": 50,
+        "source_file": "downloader.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 5,
+        "severity": "Medium",
+        "risk_score": 50,
+        "source_file": "downloader.sh_20260624_174014_485220.json"
+      }
+    ],
+    "severity_mode": "Medium",
+    "severity_counts": {
+      "Medium": 5
+    },
+    "avg_risk_score": 50.0
+  },
+  {
+    "model": "llama3.1:latest",
+    "log_name": "downloader_persistence.sh",
+    "source_file": "downloader_persistence.sh_20260624_174014_485220.json",
+    "runs": [
+      {
+        "run": 1,
+        "severity": "Low",
+        "risk_score": 20,
+        "source_file": "downloader_persistence.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 2,
+        "severity": "Low",
+        "risk_score": 20,
+        "source_file": "downloader_persistence.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 3,
+        "severity": "Low",
+        "risk_score": 20,
+        "source_file": "downloader_persistence.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 4,
+        "severity": "Low",
+        "risk_score": 20,
+        "source_file": "downloader_persistence.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 5,
+        "severity": "Low",
+        "risk_score": 20,
+        "source_file": "downloader_persistence.sh_20260624_174014_485220.json"
+      }
+    ],
+    "severity_mode": "Low",
+    "severity_counts": {
+      "Low": 5
+    },
+    "avg_risk_score": 20.0
+  },
+  {
+    "model": "llama3.1:latest",
+    "log_name": "miner_recon.sh",
+    "source_file": "miner_recon.sh_20260624_174014_485220.json",
+    "runs": [
+      {
+        "run": 1,
+        "severity": "Low",
+        "risk_score": 10,
+        "source_file": "miner_recon.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 2,
+        "severity": "Low",
+        "risk_score": 10,
+        "source_file": "miner_recon.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 3,
+        "severity": "Low",
+        "risk_score": 10,
+        "source_file": "miner_recon.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 4,
+        "severity": "Low",
+        "risk_score": 10,
+        "source_file": "miner_recon.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 5,
+        "severity": "Low",
+        "risk_score": 10,
+        "source_file": "miner_recon.sh_20260624_174014_485220.json"
+      }
+    ],
+    "severity_mode": "Low",
+    "severity_counts": {
+      "Low": 5
+    },
+    "avg_risk_score": 10.0
+  },
+  {
+    "model": "llama3.1:latest",
+    "log_name": "password_modification.sh",
+    "source_file": "password_modification.sh_20260624_174014_485220.json",
+    "runs": [
+      {
+        "run": 1,
+        "severity": "High",
+        "risk_score": 80,
+        "source_file": "password_modification.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 2,
+        "severity": "High",
+        "risk_score": 80,
+        "source_file": "password_modification.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 3,
+        "severity": "High",
+        "risk_score": 80,
+        "source_file": "password_modification.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 4,
+        "severity": "High",
+        "risk_score": 80,
+        "source_file": "password_modification.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 5,
+        "severity": "High",
+        "risk_score": 80,
+        "source_file": "password_modification.sh_20260624_174014_485220.json"
+      }
+    ],
+    "severity_mode": "High",
+    "severity_counts": {
+      "High": 5
+    },
+    "avg_risk_score": 80.0
+  },
+  {
+    "model": "llama3.1:latest",
+    "log_name": "reconnaissance.sh",
+    "source_file": "reconnaissance.sh_20260624_174014_485220.json",
+    "runs": [
+      {
+        "run": 1,
+        "severity": "Low",
+        "risk_score": 10,
+        "source_file": "reconnaissance.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 2,
+        "severity": "Low",
+        "risk_score": 10,
+        "source_file": "reconnaissance.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 3,
+        "severity": "Low",
+        "risk_score": 10,
+        "source_file": "reconnaissance.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 4,
+        "severity": "Low",
+        "risk_score": 10,
+        "source_file": "reconnaissance.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 5,
+        "severity": "Low",
+        "risk_score": 10,
+        "source_file": "reconnaissance.sh_20260624_174014_485220.json"
+      }
+    ],
+    "severity_mode": "Low",
+    "severity_counts": {
+      "Low": 5
+    },
+    "avg_risk_score": 10.0
+  },
+  {
+    "model": "llama3.1:latest",
+    "log_name": "ssh_persistence.sh",
+    "source_file": "ssh_persistence.sh_20260624_174014_485220.json",
+    "runs": [
+      {
+        "run": 1,
+        "severity": "High",
+        "risk_score": 80,
+        "source_file": "ssh_persistence.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 2,
+        "severity": "High",
+        "risk_score": 80,
+        "source_file": "ssh_persistence.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 3,
+        "severity": "High",
+        "risk_score": 80,
+        "source_file": "ssh_persistence.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 4,
+        "severity": "High",
+        "risk_score": 80,
+        "source_file": "ssh_persistence.sh_20260624_174014_485220.json"
+      },
+      {
+        "run": 5,
+        "severity": "High",
+        "risk_score": 80,
+        "source_file": "ssh_persistence.sh_20260624_174014_485220.json"
+      }
+    ],
+    "severity_mode": "High",
+    "severity_counts": {
+      "High": 5
+    },
+    "avg_risk_score": 80.0
+  }
+]

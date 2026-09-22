@@ -1,0 +1,41 @@
+{
+  "msg": "File Sandbox Environment - Is this file safe to use or suspicious?",
+  "target_file": "/home/user/Documents/setup.sh",
+  "execution_time_seconds": 45,
+  "exit_code": 0,
+  "network_connections": [
+    {
+      "type": "tcp",
+      "destination_ip": "192.168.65.7",
+      "port": 53,
+      "protocol": "udp",
+      "hits": 3,
+      "out": 2,
+      "in": 1,
+      "out_payload": "0 pkts/0B",
+      "in_payload": "0 pkts/0B"
+    }
+  ],
+  "traffic_verdict": [
+    {
+      "ip": "192.168.65.7",
+      "score": 0,
+      "reports": 0,
+      "country": "None",
+      "isTor": false
+    }
+  ],
+  "filesystem_changes": {
+    "modified": "None",
+    "new_files": [
+      "/home/user/Documents/redtail.x86_64",
+      "/home/user/Documents/redtail.arm7",
+      "/home/user/Documents/redtail.arm8",
+      "/home/user/Documents/redtail.i686",
+      "/etc/systemd/system/your-redtail.service",
+      "/etc/cron.d/e2scrub_all",
+      "/etc/cron.daily/dpkg"
+    ],
+    "deleted": "None"
+  }
+}

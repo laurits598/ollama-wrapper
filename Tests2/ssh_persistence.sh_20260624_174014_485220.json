@@ -1,0 +1,22 @@
+{
+  "target_file": "/tmp/tmpaat4vl79/home/user/Documents/ssh_persistence.sh",
+  "execution_time": 1,
+  "exit_code": 0,
+  "network_connections": [],
+  "traffic_verdict": [],
+  "filesystem_changes": {
+    "modified": [
+      "/root"
+    ],
+    "new": [
+      "/root/.ssh",
+      "/root/.ssh/authorized_keys"
+    ],
+    "deleted": []
+  },
+  "malware_output": {
+    "content": "",
+    "lines": 0,
+    "truncated": false
+  }
+}

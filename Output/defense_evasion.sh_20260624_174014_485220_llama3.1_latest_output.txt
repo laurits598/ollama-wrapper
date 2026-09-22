@@ -1,0 +1,10 @@
+{
+  "classification": "Benign installer",
+  "severity": "Low",
+  "risk_score": 10,
+  "evidence": [
+    "Execution time was short (1 second)",
+    "No network connections were made",
+    "No filesystem changes were observed"
+  ]
+}

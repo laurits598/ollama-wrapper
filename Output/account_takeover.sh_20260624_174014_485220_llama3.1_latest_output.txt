@@ -1,0 +1,10 @@
+{
+  "classification": "Trojan / credential stealer",
+  "severity": "Critical",
+  "risk_score": 95,
+  "evidence": [
+    "Modified /etc/shadow, a critical system file.",
+    "Created new directory /root/.ssh and added authorized_keys file.",
+    "Accessed /root, indicating potential root escalation."
+  ]
+}

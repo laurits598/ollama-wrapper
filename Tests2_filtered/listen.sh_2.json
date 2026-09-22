@@ -1,0 +1,17 @@
+{
+  "target_file": "/tmp/tmpnniv3z9e/home/user/Downloads/Umbreon-Rootkit-f3fbc358daba6629aa1abd53e77ee55e68191ec1/Umbreon-Rootkit-f3fbc358daba6629aa1abd53e77ee55e68191ec1/utils/listen.sh",
+  "execution_time": 2,
+  "exit_code": 0,
+  "network_connections": [],
+  "traffic_verdict": [],
+  "filesystem_changes": {
+    "modified": [],
+    "new": [],
+    "deleted": []
+  },
+  "malware_output": {
+    "content": "./listen.sh: line 3: [: -ge: unary operator expected\n[-] Not a valid port",
+    "lines": 2,
+    "truncated": false
+  }
+}

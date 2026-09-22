@@ -1,0 +1,17 @@
+{
+  "target_file": "/tmp/tmpnniv3z9e/home/user/Downloads/Umbreon-Rootkit-f3fbc358daba6629aa1abd53e77ee55e68191ec1/Umbreon-Rootkit-f3fbc358daba6629aa1abd53e77ee55e68191ec1/utils/environment.sh",
+  "execution_time": 2,
+  "exit_code": 2,
+  "network_connections": [],
+  "traffic_verdict": [],
+  "filesystem_changes": {
+    "modified": [],
+    "new": [],
+    "deleted": []
+  },
+  "malware_output": {
+    "content": "./environment.sh: line 20: syntax error: unexpected end of file",
+    "lines": 1,
+    "truncated": false
+  }
+}

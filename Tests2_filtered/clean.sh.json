@@ -1,0 +1,63 @@
+{
+  "target_file": "/tmp/tmpl2ezncni/home/user/Documents/clean.sh",
+  "execution_time": 5,
+  "exit_code": 0,
+  "network_connections": [
+    {
+      "protocol": "tcp",
+      "destination_ip": "14.69.66.92",
+      "port": 2375,
+      "hits": 1
+    },
+    {
+      "protocol": "tcp",
+      "destination_ip": "59.29.107.99",
+      "port": 2375,
+      "hits": 1
+    },
+    {
+      "protocol": "tcp",
+      "destination_ip": "114.44.3.170",
+      "port": 2375,
+      "hits": 1
+    },
+    {
+      "protocol": "tcp",
+      "destination_ip": "126.55.86.242",
+      "port": 2222,
+      "hits": 1
+    },
+    {
+      "protocol": "tcp",
+      "destination_ip": "119.203.250.228",
+      "port": 443,
+      "hits": 1
+    },
+    {
+      "protocol": "tcp",
+      "destination_ip": "126.220.151.54",
+      "port": 22,
+      "hits": 1
+    }
+  ],
+  "traffic_verdict": [],
+  "filesystem_changes": {
+    "modified": [
+      "/etc",
+      "/etc/cron.daily",
+      "/etc/cron.daily/apt-compat",
+      "/etc/cron.daily/dpkg",
+      "/etc/cron.d",
+      "/etc/cron.d/e2scrub_all"
+    ],
+    "new": [
+      "/etc/anacrontab"
+    ],
+    "deleted": []
+  },
+  "malware_output": {
+    "content": "[Error reading output: cat: /tmp/malware_output.txt: No such file or directory]",
+    "lines": 1,
+    "truncated": false
+  }
+}

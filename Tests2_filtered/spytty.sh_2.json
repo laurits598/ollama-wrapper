@@ -1,0 +1,17 @@
+{
+  "target_file": "/tmp/tmpnniv3z9e/home/user/Downloads/Umbreon-Rootkit-f3fbc358daba6629aa1abd53e77ee55e68191ec1/Umbreon-Rootkit-f3fbc358daba6629aa1abd53e77ee55e68191ec1/spytty.sh",
+  "execution_time": 2,
+  "exit_code": 1,
+  "network_connections": [],
+  "traffic_verdict": [],
+  "filesystem_changes": {
+    "modified": [],
+    "new": [],
+    "deleted": []
+  },
+  "malware_output": {
+    "content": "[+] TTYFuckery\n[?] by user@neko.li and reiko@neko.li\n 15:06:36 up  2:36,  0 users,  load average: 2.57, 1.14, 0.46\nUSER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT\n[?] usage: ./spytty.sh ptsnum (ignore the pts/ just type the numer)",
+    "lines": 5,
+    "truncated": false
+  }
+}

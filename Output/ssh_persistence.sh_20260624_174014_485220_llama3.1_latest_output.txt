@@ -1,0 +1,9 @@
+{
+  "classification": "Privilege Escalation / Persistence",
+  "severity": "High",
+  "risk_score": 80,
+  "evidence": [
+    "Modified the root directory (/root)",
+    "Created a new .ssh directory and authorized_keys file in /root"
+  ]
+}

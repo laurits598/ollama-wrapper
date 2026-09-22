@@ -1,0 +1,38 @@
+{
+  "msg": "File Sandbox Environment - Is this file safe to use or suspicious?",
+  "target_file": "/home/user/Documents/backup_config.sh",
+  "execution_time_seconds": 12,
+  "exit_code": 0,
+  "network_connections": [
+    {
+      "type": "tcp",
+      "destination_ip": "8.8.8.8",
+      "port": 53,
+      "protocol": "udp",
+      "hits": 2,
+      "out": 1,
+      "in": 1,
+      "out_payload": "0 pkts/0B",
+      "in_payload": "0 pkts/0B"
+    }
+  ],
+  "traffic_verdict": [
+    {
+      "ip": "8.8.8.8",
+      "score": 0,
+      "reports": 0,
+      "country": "United States",
+      "isTor": false
+    }
+  ],
+  "filesystem_changes": {
+    "modified": [
+      "/var/spool/cron/crontabs/user"
+    ],
+    "new_files": [
+      "/home/user/.local/share/.cache/worker",
+      "/.worker-pid"
+    ],
+    "deleted": "None"
+  }
+}

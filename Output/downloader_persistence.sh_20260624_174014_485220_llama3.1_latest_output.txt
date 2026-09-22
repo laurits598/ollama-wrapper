@@ -1,0 +1,10 @@
+{
+  "classification": "Benign installer",
+  "severity": "Low",
+  "risk_score": 20,
+  "evidence": [
+    "Modified /root directory",
+    "Created new files in /root/.ssh, including authorized_keys",
+    "Attempted to download payload.sh from http://example.com/payload.sh but received a 404 Not Found error"
+  ]
+}
