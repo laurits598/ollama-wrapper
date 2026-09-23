@@ -1,40 +1,46 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-test_dir="Tests2"
+set -euo pipefail
 
-models=(
-    "llama3.1:latest"
-)
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd -- "$SCRIPT_DIR/../.." && pwd)"
+TEST_DIR="$REPO_ROOT/testing/fixtures/attacks"
+RESULTS_DIR="$REPO_ROOT/testing/results"
+PERSONA_FILE="$REPO_ROOT/personas/persona_claude.yaml"
+
+models=("llama3.1:latest")
 
 for model in "${models[@]}"; do
-    for file in "$test_dir"/*.json; do
+    for file in "$TEST_DIR"/*.json; do
         echo "[+] Processing: $file with model: $model"
-        python3 wrapper.py "$file" "$model"
+        python3 "$REPO_ROOT/wrapper.py" "$file" "$model" \
+            --persona "$PERSONA_FILE" \
+            --output-dir "$RESULTS_DIR"
     done
 done
 
 echo
 echo "[+] Summary"
 
-python3 - <<'PY'
+python3 - "$TEST_DIR" "$RESULTS_DIR" <<'PY'
 import json
 import re
+import sys
 from pathlib import Path
 
-test_dir = Path("Tests2")
-output_dir = Path("Output")
-models = [
-    "llama3.1:latest"
-]
+test_dir = Path(sys.argv[1])
+output_dir = Path(sys.argv[2])
+models = ["llama3.1:latest"]
+
 
 def make_safe_filename(value: str) -> str:
     return re.sub(r'[^A-Za-z0-9._-]+', '_', value).strip('._-') or "output"
 
+
 def display_log_name(filename: str) -> str:
     match = re.match(r"^(.*?\.(?:sh|py))", filename)
-    if match:
-        return match.group(1)
-    return Path(filename).stem
+    return match.group(1) if match else Path(filename).stem
+
 
 for model in models:
     print(f"Model: {model}")
@@ -50,9 +56,7 @@ for model in models:
 
         try:
             data = json.loads(output_file.read_text(encoding="utf-8"))
-            severity = data.get("severity", "N/A")
-            risk_score = data.get("risk_score", "N/A")
-            print(f"  {display_name}: {severity} ({risk_score})")
+            print(f"  {display_name}: {data.get('severity', 'N/A')} ({data.get('risk_score', 'N/A')})")
         except Exception:
             print(f"  {display_name}: Parse error")
 

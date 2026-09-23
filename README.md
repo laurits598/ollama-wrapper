@@ -1,26 +1,74 @@
-# OllamaWrapper - Quick Start
+# OllamaWrapper
 
-A minimal wrapper around Ollama for analyzing malware verdicts.
+A small local wrapper around Ollama for turning malware-sandbox verdict data into a compact, structured malware assessment.
+
+## File tree
+
+```text
+.
+├── Dockerfile.ollama
+├── MODELS.md
+├── NOTES.md
+├── README.md
+├── wrapper.py
+├── personas/
+│   ├── persona.yaml
+│   ├── persona_brief.yaml
+│   └── persona_claude.yaml
+└── testing/
+    ├── README.md
+    ├── fixtures/
+    │   ├── baseline/*.json
+    │   ├── attacks/*.json
+    │   └── filtered/*.json
+    ├── scripts/
+    │   ├── check_outputs.py
+    │   ├── repeated_attacks.sh
+    │   ├── run_attacks.sh
+    │   ├── run_baseline_models.sh
+    │   └── run_filtered_qwen.sh
+    └── results/
+        ├── *.txt
+        ├── *.csv
+        ├── *.json
+        └── *.md
+```
 
 ## Files
 
-- **Dockerfile.ollama** - Container image (ollama + model)
-- **wrapper.py** - Middleware: loads inputs, sends to ollama, returns output
-- **input.json** - Sample verdict data (with "msg" field)
-- **persona.yaml** - LLM instructions (system prompt, mission, format)
+- **Dockerfile.ollama** - Ollama server image definition
+- **wrapper.py** - Main CLI and Ollama integration
+- **personas/** - LLM instruction and scoring profiles
+- **testing/** - Fixtures, evaluation scripts, and result artifacts
+
+Testing data and scripts are organized as follows:
+
+```text
+testing/
+  fixtures/baseline/       Small baseline verdicts
+  fixtures/attacks/        Attack-oriented verdicts
+  fixtures/filtered/       Filtered/normalized verdicts
+  scripts/                 Evaluation and result-checking scripts
+  results/                 Checked-in outputs and generated summaries
+
+personas/
+  persona_claude.yaml      Active JSON-oriented persona
+  persona_brief.yaml       Alternative concise persona
+  persona.yaml             Legacy human-readable persona
+```
 
 ## How It Works
 
 ```
-input.json (verdict data)
+verdict.json (verdict data)
     ↓
-persona.yaml (instructions)
+personas/persona_claude.yaml (instructions)
     ↓
 wrapper.py (combines them)
     ↓
 Ollama/LLM (analyzes)
     ↓
-output.txt (human-readable analysis)
+testing/results/* (validated JSON analysis)
 ```
 
 ## Quick Start
@@ -28,7 +76,7 @@ output.txt (human-readable analysis)
 ### 1. Start Ollama Container
 
 ```bash
-# Pull and run ollama
+# Pull and run Ollama
 docker run -d -p 11434:11434 --name ollama ollama/ollama
 
 # Pull a model (pick one):
@@ -46,30 +94,39 @@ pip install requests pyyaml
 ### 3. Run Analysis
 
 ```bash
-python3 wrapper.py
+python3 wrapper.py testing/fixtures/baseline/agent_test.json llama3.1:latest
 ```
 
-Output will be in `output.txt`.
+Output is written to `testing/results/` by default.
+
+The complete CLI is:
+
+```bash
+python3 wrapper.py <json_file> [model] \
+  --persona path/to/persona.yaml \
+  --output-dir path/to/results \
+  --ollama-url http://localhost:11434
+```
 
 ## Files Explained
 
-### Dockerfile
-Runs ollama and exposes port 11434.
+### Dockerfile.ollama
+Provides the Ollama server base image and exposes port 11434. It does not preload a model.
 
 ### wrapper.py
-- Loads `persona.yaml` (instructions)
-- Loads `input.json` (verdict data)
+- Loads `personas/persona_claude.yaml` by default (instructions)
+- Loads the JSON verdict passed on the command line
 - Combines them into a prompt
 - Sends to Ollama
 - Returns analysis
-- Saves to `output.txt`
+- Validates and saves JSON to `testing/results/` by default
 
-### input.json
-Your verdict data. Can be:
+### Verdict JSON
+Your verdict data. It can be:
 - Simple: just `"msg"` field
 - Complex: full structure from malware detector
 
-### persona.yaml
+### Persona YAML
 Defines what the LLM does:
 - `system` - Background/expertise
 - `mission` - What to analyze
@@ -78,21 +135,21 @@ Defines what the LLM does:
 ## Customization
 
 ### Change Model
-Edit `wrapper.py`, line in `main()`:
-```python
-wrapper = OllamaWrapper(model="mistral")  # or "neural-chat"
+Pass a model name on the command line:
+```bash
+python3 wrapper.py testing/fixtures/baseline/agent_test.json mistral:latest
 ```
 
 ### Change Input/Output Files
-Edit `wrapper.py`, in `main()`:
-```python
-wrapper.load_persona("my_persona.yaml")
-wrapper.load_input("my_input.json")
-wrapper.save_output(output, "my_output.txt")
+Pass the input and output paths on the command line:
+```bash
+python3 wrapper.py my_input.json mistral:latest \
+  --persona my_persona.yaml \
+  --output-dir my_results
 ```
 
 ### Change Persona
-Edit `persona.yaml` to change:
+Edit a file under `personas/` to change:
 - What the LLM is an expert in
 - What it should analyze
 - How it should format output
@@ -102,14 +159,24 @@ Edit `persona.yaml` to change:
 Test without a full malware detector:
 
 ```bash
-# 1. Make sure ollama is running
+# 1. Make sure Ollama is running
 docker ps  # should see ollama container
 
-# 2. Run wrapper
-python3 wrapper.py
+# 2. Run the wrapper
+python3 wrapper.py testing/fixtures/baseline/agent_test.json llama3.1:latest
 
 # 3. Check output
-cat output.txt
+cat testing/results/agent_test_llama3.1_latest_output.txt
+```
+
+Evaluation scripts live under `testing/scripts/` and resolve repository paths themselves:
+
+```bash
+bash testing/scripts/run_attacks.sh
+bash testing/scripts/run_filtered_qwen.sh
+bash testing/scripts/run_baseline_models.sh
+bash testing/scripts/repeated_attacks.sh 5
+python3 testing/scripts/check_outputs.py
 ```
 
 ## Common Issues
@@ -135,8 +202,8 @@ docker exec ollama ollama pull llama2
 
 ## Next Steps
 
-1. Test with sample input.json
-2. Customize persona.yaml for your needs
+1. Test with a fixture under `testing/fixtures/`
+2. Customize a persona file under `personas/`
 3. Integrate with malware detector (later)
 4. Add more input fields as needed
 

@@ -1,7 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-test_dir="Tests"
-timing_file="Output/model_timings.jsonl"
+set -euo pipefail
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd -- "$SCRIPT_DIR/../.." && pwd)"
+test_dir="$REPO_ROOT/testing/fixtures/baseline"
+output_dir="$REPO_ROOT/testing/results"
+timing_file="$output_dir/model_timings.jsonl"
+persona_file="$REPO_ROOT/personas/persona_claude.yaml"
 
 models=(
     "llama3.1:latest"
@@ -11,7 +17,7 @@ models=(
     "mistral-nemo:12b"
 )
 
-mkdir -p Output
+mkdir -p "$output_dir"
 : > "$timing_file"
 
 for model in "${models[@]}"; do
@@ -20,7 +26,9 @@ for model in "${models[@]}"; do
 
     for file in "$test_dir"/*.json; do
         echo "[+] Processing: $file with model: $model"
-        python3 wrapper.py "$file" "$model"
+        python3 "$REPO_ROOT/wrapper.py" "$file" "$model" \
+            --persona "$persona_file" \
+            --output-dir "$output_dir"
         test_count=$((test_count + 1))
     done
 
@@ -31,14 +39,17 @@ for model in "${models[@]}"; do
     echo "[+] Model timing: $model took ${elapsed_seconds}s across ${test_count} tests"
 done
 
-echo "[+] Building markdown summary table in Output/model_comparison.md"
+echo "[+] Building markdown summary table in $output_dir/model_comparison.md"
 
-python3 - <<'PY'
+python3 - "$test_dir" "$output_dir" "$timing_file" <<'PY'
 import json
 import re
+import sys
 from pathlib import Path
 
-test_dir = Path("Tests")
+test_dir = Path(sys.argv[1])
+output_dir = Path(sys.argv[2])
+timing_path = Path(sys.argv[3])
 models = [
     "llama3.1:latest",
     "llama3:8b",
@@ -51,9 +62,7 @@ def make_safe_filename(value: str) -> str:
     return re.sub(r'[^A-Za-z0-9._-]+', '_', value).strip('._-') or "output"
 
 tests = sorted(test_dir.glob("*.json"))
-output_dir = Path("Output")
 summary_path = output_dir / "model_comparison.md"
-timing_path = output_dir / "model_timings.jsonl"
 
 lines = []
 lines.append("# Model Comparison")

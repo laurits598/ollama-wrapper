@@ -1,12 +1,15 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -euo pipefail
 
-test_dir="Tests2"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd -- "$SCRIPT_DIR/../.." && pwd)"
+test_dir="$REPO_ROOT/testing/fixtures/attacks"
 runs="${1:-5}"
-output_dir="Output"
+output_dir="$REPO_ROOT/testing/results"
 results_csv="$output_dir/multi_run_results.csv"
 results_json="$output_dir/multi_run_results.json"
+persona_file="$REPO_ROOT/personas/persona_claude.yaml"
 
 models=(
     "llama3.1:latest"
@@ -29,9 +32,11 @@ for run in $(seq 1 "$runs"); do
     for model in "${models[@]}"; do
         for file in "$test_dir"/*.json; do
             echo "[+] Processing: $file with model: $model (run $run/$runs)"
-            python3 wrapper.py "$file" "$model"
+            python3 "$REPO_ROOT/wrapper.py" "$file" "$model" \
+                --persona "$persona_file" \
+                --output-dir "$output_dir"
 
-            python3 - <<'PY' "$file" "$model" "$run" "$results_csv"
+            python3 - "$file" "$model" "$run" "$results_csv" "$output_dir" <<'PY'
 import csv
 import json
 import re
@@ -42,6 +47,7 @@ input_file = Path(sys.argv[1])
 model = sys.argv[2]
 run = int(sys.argv[3])
 results_csv = Path(sys.argv[4])
+output_dir = Path(sys.argv[5])
 
 def make_safe_filename(value: str) -> str:
     return re.sub(r'[^A-Za-z0-9._-]+', '_', value).strip('._-') or "output"
@@ -53,7 +59,7 @@ def display_log_name(filename: str) -> str:
     return Path(filename).stem
 
 safe_model = make_safe_filename(model)
-output_file = Path("Output") / f"{input_file.stem}_{safe_model}_output.txt"
+output_file = output_dir / f"{input_file.stem}_{safe_model}_output.txt"
 
 with open(output_file, "r", encoding="utf-8") as f:
     data = json.load(f)

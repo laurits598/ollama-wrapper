@@ -9,15 +9,21 @@ Handles:
 - Returning structured response
 """
 
+import argparse
 import json
+import os
+import re
 import requests
 import yaml
 import sys
 from pathlib import Path
 from typing import Dict, Any, Optional
 
-#YAML_FILE = "persona_brief.yaml"
+PROJECT_ROOT = Path(__file__).resolve().parent
+PERSONA_DIR = PROJECT_ROOT / "personas"
 YAML_FILE = "persona_claude.yaml"
+DEFAULT_PERSONA_FILE = PERSONA_DIR / YAML_FILE
+DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "testing" / "results"
 REQUIRED_KEYS = {"classification", "severity", "risk_score", "evidence"}
 
 class OllamaWrapper:
@@ -281,14 +287,11 @@ User Input:
             output: The response text
             output_file: Where to save it
         """
-        with open(output_file, 'w') as f:
+        output_path = Path(output_file)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        with output_path.open('w') as f:
             f.write(output)
-        print(f"[+] Output saved to {output_file}")
-
-
-import sys
-import os
-import re
+        print(f"[+] Output saved to {output_path}")
 
 
 def make_safe_filename(value: str) -> str:
@@ -296,43 +299,54 @@ def make_safe_filename(value: str) -> str:
     return re.sub(r'[^A-Za-z0-9._-]+', '_', value).strip('._-') or "output"
 
 
-def main():
-    """Main entry point - accepts JSON file as argument."""
-    
-    # Get input file from command line, or use default
-    if len(sys.argv) > 1:
-        input_file = sys.argv[1]
-    else:
-        input_file = "input.json"
-    
-    # Check if file exists
+def main(argv=None):
+    """Run one analysis from a JSON verdict file."""
+    parser = argparse.ArgumentParser(description="Analyze a malware verdict with Ollama")
+    parser.add_argument(
+        "input_file",
+        nargs="?",
+        default="input.json",
+        help="JSON verdict file (default: input.json)",
+    )
+    parser.add_argument(
+        "model",
+        nargs="?",
+        default="qwen2.5-coder:7b",
+        help="Ollama model name (default: qwen2.5-coder:7b)",
+    )
+    parser.add_argument(
+        "--persona",
+        default=str(DEFAULT_PERSONA_FILE),
+        help=f"Persona YAML file (default: {DEFAULT_PERSONA_FILE})",
+    )
+    parser.add_argument(
+        "--output-dir",
+        default=str(DEFAULT_OUTPUT_DIR),
+        help=f"Directory for analysis output (default: {DEFAULT_OUTPUT_DIR})",
+    )
+    parser.add_argument(
+        "--ollama-url",
+        default="http://localhost:11434",
+        help="Ollama server URL (default: http://localhost:11434)",
+    )
+    args = parser.parse_args(argv)
+
+    input_file = args.input_file
     if not os.path.exists(input_file):
         print(f"[!] Error: File not found: {input_file}")
-        print(f"[?] Usage: python3 wrapper.py <json_file> [model_name]")
-        print(f"[?] Example: python3 wrapper.py test_cryptominer.json llama3:latest")
+        print("[?] Usage: python3 wrapper.py <json_file> [model_name] [options]")
+        print("[?] Example: python3 wrapper.py test_cryptominer.json llama3:latest")
         sys.exit(1)
-    
-    # Get model from command line, or use default
-    if len(sys.argv) > 2:
-        model = sys.argv[2]
-    else:
-        #model = "llama3:latest"
-        #model = "llama3.1:latest"
-        model = "qwen2.5-coder:7b"
-        #model = "llama-guard3:latest"
-        #model = "qwen2.5-coder:14b"
-        #model = "mistral:latest"
-        #model = "deepseek-r1:latest"
 
     # Initialize wrapper
     wrapper = OllamaWrapper(
-        ollama_url="http://localhost:11434",
-        model=model,
+        ollama_url=args.ollama_url,
+        model=args.model,
     )
     
     # Load persona and input
-    print(f"[+] Loading persona from: {YAML_FILE}")
-    wrapper.load_persona(YAML_FILE)
+    print(f"[+] Loading persona from: {args.persona}")
+    wrapper.load_persona(args.persona)
     
     print(f"[+] Loading input from: {input_file}")
     wrapper.load_input(input_file)
@@ -350,10 +364,10 @@ def main():
     # Save to file
     # Get just the filename, not the full path
     #output_filename = os.path.basename(input_file).replace(".json", "_output.txt")
-    safe_model = make_safe_filename(model)
+    safe_model = make_safe_filename(args.model)
     output_filename = os.path.basename(input_file).replace(".json", f"_{safe_model}_output.txt")
-    os.makedirs("Output", exist_ok=True)
-    wrapper.save_output(output, os.path.join("Output", output_filename))
+    output_path = Path(args.output_dir) / output_filename
+    wrapper.save_output(output, str(output_path))
     print(f"[+] Output saved to: {output_filename}")
 
 
