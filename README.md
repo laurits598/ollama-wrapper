@@ -2,6 +2,8 @@
 
 A small local wrapper around Ollama for turning malware-sandbox verdict data into a compact, structured malware assessment.
 
+This project is an **LLM evaluation harness**: it standardizes verdict inputs, prompts, model calls, output validation, and repeatable model comparisons.
+
 ## File tree
 
 ```text
